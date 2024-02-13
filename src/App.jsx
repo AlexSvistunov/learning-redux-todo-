@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "./App.css";
+import TodoBtn from "./components/TodoBtn";
+import TodoInput from "./components/TodoInput";
+import TodoList from "./components/TodoList";
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -9,16 +12,17 @@ function App() {
     setInputValue(value);
   };
 
-  const onClickHandler = (value) => {
-    if (value.trim().length) {
+  const onClickHandler = () => {
+    if (inputValue.trim().length) {
       setTodoList([
         ...todoList,
         {
           id: new Date().toISOString(),
-          text: value,
+          text: inputValue,
           completed: false,
         },
       ]);
+
       setInputValue("");
     }
   };
@@ -33,7 +37,7 @@ function App() {
         if (el.id === id) {
           return {
             ...el,
-            completed: true,
+            completed: !el.completed,
           };
         }
 
@@ -47,30 +51,15 @@ function App() {
   return (
     <>
       <div>
-        <input
-          value={inputValue}
-          onChange={(e) => onChangeHandler(e.target.value)}
-        ></input>
-        <button onClick={() => onClickHandler(inputValue)}>Create todo</button>
+        <TodoInput onChangeHandler={onChangeHandler} value={inputValue} />
+        <TodoBtn onClickFunction={onClickHandler} />
       </div>
 
-      <ul>
-        {todoList.map((el) => (
-          <li className="todo" key={el.id}>
-            <div className="box">
-              <input
-                type="checkbox"
-                checked={el.completed}
-                onChange={() => completeTask(el.id)}
-              ></input>
-              <span className={el.completed ? " line" : ""}>{el.text}</span>
-            </div>
-            <span onClick={() => deleteItem(el.id)} className="delete">
-              &times;
-            </span>
-          </li>
-        ))}
-      </ul>
+      <TodoList
+        completeTask={completeTask}
+        deleteItem={deleteItem}
+        todoList={todoList}
+      />
     </>
   );
 }
