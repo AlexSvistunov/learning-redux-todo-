@@ -8,7 +8,7 @@ const TodoList = () => {
   return (
     <ul>
       {todoList.length ? todoList.map((el) => (
-        <TodoItem key={el.id} text={el.text} id={el.id}></TodoItem>
+        <TodoItem key={el.id} text={el.text} id={el.id} isCompleted={el.completed}></TodoItem>
       )) : <h3>НЕТ ДЕЛ</h3>}
       
     </ul>
