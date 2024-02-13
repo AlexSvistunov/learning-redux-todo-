@@ -1,12 +1,16 @@
 import React from "react";
 import TodoItem from "./TodoItem";
+import { useDispatch, useSelector } from "react-redux";
 
-const TodoList = ({ todoList, deleteItem, completeTask }) => {
+const TodoList = () => {
+  const dispatch = useDispatch();
+  const todoList = useSelector((state) => state.todos.todos);
   return (
     <ul>
-      {todoList.map((el) => (
-        <TodoItem key={el.id} deleteItem={deleteItem} completeTask={completeTask} el={el}></TodoItem>
-      ))}
+      {todoList.length ? todoList.map((el) => (
+        <TodoItem key={el.id} text={el.text} id={el.id}></TodoItem>
+      )) : <h3>НЕТ ДЕЛ</h3>}
+      
     </ul>
   );
 };

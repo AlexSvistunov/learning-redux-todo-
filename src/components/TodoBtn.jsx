@@ -1,8 +1,17 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { addTodo } from '../store/todoSlice'
 
-const TodoBtn = ({onClickFunction}) => {
+const TodoBtn = ({value, setInputValue}) => {
+  const dispatch = useDispatch()
+
+  const onClickHandler = () => {
+    dispatch(addTodo({value}))
+    setInputValue('')
+
+  }
   return (
-    <button onClick={() => onClickFunction()}>Create todo</button>
+    <button onClick={() => onClickHandler()}>Create todo</button>
   )
 }
 

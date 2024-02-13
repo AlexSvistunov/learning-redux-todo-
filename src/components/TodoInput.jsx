@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TodoInput = ({onChangeHandler, value}) => {
+const TodoInput = ({value, onChangeHandler}) => {
   return (
     <input value={value} onChange={(e) => onChangeHandler(e.target.value)}></input>
   )
