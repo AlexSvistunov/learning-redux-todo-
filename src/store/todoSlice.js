@@ -20,6 +20,37 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
+export const insertTodo = createAsyncThunk(
+  'todos/insertTodo',
+  async function(value, {rejectWithValue, dispatch}) {
+    try {
+      const todo = {
+        userId: '1',
+        title: value,
+        completed: false,
+      }
+      const response = await fetch(`https://jsonplaceholder.typicode.com/todos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },  
+        body: JSON.stringify(todo)
+      })
+
+      console.log(response);
+
+      if(!response.ok) {
+        throw new Error('Insert todo error')
+      }
+
+      const data = await response.json()
+      dispatch(addTodo(data))
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
 export const toggleStatus = createAsyncThunk(
   'todos/toggleStatus',
   async function(id, {rejectWithValue, dispatch, getState}) {
@@ -51,7 +82,7 @@ export const fetchTodos = createAsyncThunk(
   async function (_, { rejectWithValue }) {
     try {
       const response = await fetch(
-        "https://jsonplaceholder.typicode.com/todos?_limit=100"
+        "https://jsonplaceholder.typicode.com/todos?_limit=10"
       );
       const data = await response.json();
       console.log(data);
@@ -76,11 +107,7 @@ export const todoSlice = createSlice({
   },
   reducers: {
     addTodo(state, action) {
-      state.todos.push({
-        id: new Date().toISOString(),
-        text: action.payload.value,
-        completed: false,
-      });
+     state.todos.push(action.payload)
     },
     removeTodo(state, action) {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);

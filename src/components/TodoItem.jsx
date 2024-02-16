@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { removeTodo, toggleTodo } from "../store/todoSlice.js";
 import { deleteTodo } from "../store/todoSlice.js";
-import { toggleStatus } from "../store/todoSlice.js";
+
 
 const TodoItem = ({ title, id, isCompleted }) => {
   const dispatch = useDispatch();
@@ -12,8 +12,7 @@ const TodoItem = ({ title, id, isCompleted }) => {
   };
 
   const toggleTodoHandler = () => {
-    // dispatch(toggleTodo({id}))
-    dispatch(toggleStatus(id))
+    dispatch(toggleTodo({id}))
   }
   return (
     <li className="todo">
