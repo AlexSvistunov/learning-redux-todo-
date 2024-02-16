@@ -10,9 +10,6 @@ export const deleteTodo = createAsyncThunk(
         { method: "DELETE" }
       );
 
-      console.log(response);
-      console.log(id);
-
       dispatch(removeTodo({id}));
       if (!response.ok) {
         throw new Error("Delete error");
@@ -22,6 +19,32 @@ export const deleteTodo = createAsyncThunk(
     }
   }
 );
+
+export const toggleStatus = createAsyncThunk(
+  'todos/toggleStatus',
+  async function(id, {rejectWithValue, dispatch, getState}) {
+    const todo = getState().todos.todos.find(todo => todo.id === id);
+    try {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          completed: !todo.completed,
+        })
+      })
+      dispatch(toggleTodo({id}))
+      if (!response.ok) {
+        throw new Error("Server toggle error");
+      }
+
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+   
+  }
+)
 
 export const fetchTodos = createAsyncThunk(
   "todos/fetchTodos",
