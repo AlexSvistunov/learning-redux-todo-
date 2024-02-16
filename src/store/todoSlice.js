@@ -1,6 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+export const deleteTodo = createAsyncThunk(
+  "todos/deleteTodo",
+  async function (id, { rejectWithValue, dispatch }) {
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/todos/${id}`,
+        { method: "DELETE" }
+      );
+
+      console.log(response);
+      console.log(id);
+
+      dispatch(removeTodo({id}));
+      if (!response.ok) {
+        throw new Error("Delete error");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchTodos = createAsyncThunk(
   "todos/fetchTodos",
   async function (_, { rejectWithValue }) {
@@ -17,9 +39,8 @@ export const fetchTodos = createAsyncThunk(
 
       return data;
     } catch (error) {
-      return rejectWithValue(error.message)
+      return rejectWithValue(error.message);
     }
-
   }
 );
 
@@ -62,10 +83,9 @@ export const todoSlice = createSlice({
 
     builder.addCase(fetchTodos.rejected, (state, action) => {
       state.status = "error";
-      state.error = action.payload
+      state.error = action.payload;
     });
   },
-
 });
 
 export const { addTodo, removeTodo, toggleTodo } = todoSlice.actions;
